@@ -117,3 +117,33 @@ h1 .edition{font-family:inherit;font-weight:500;font-size:10px;letter-spacing:.0
 
 .search-result-name,.structure-title,.part-hover{text-transform:none!important}
 .detail-sheet .primary-action{background:#263b48!important;color:#fff!important}.detail-sheet .primary-action.active{background:#3b5261!important}
+
+/* Подписи на модели */
+.scene-labels{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden}
+.scene-label{position:absolute;left:0;top:0;pointer-events:auto;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;line-height:16px;padding:2px 8px 2px 14px;border-radius:10px;background:#ffffffe6;color:#26313c;border:1px solid #18253622;box-shadow:0 2px 8px #18253614;cursor:pointer}
+.scene-label::before{content:'';position:absolute;left:4px;top:6px;width:6px;height:6px;border-radius:50%;background:#263b48}
+.scene-label.flip{padding:2px 14px 2px 8px}.scene-label.flip::before{left:auto;right:4px}
+.scene-label:hover{background:#fff;color:#000}
+/* Сегментированный переключатель */
+.segmented{display:inline-flex;background:#18253610;border-radius:7px;padding:2px;gap:2px}
+.segmented button{border:0;background:transparent;color:#5c6874;font-size:12px;padding:6px 10px;border-radius:5px;min-height:32px;white-space:nowrap}
+.segmented button[aria-checked=true],.segmented button[aria-pressed=true]{background:#fff;color:#1d2731;box-shadow:0 1px 3px #18253622;font-weight:600}
+.quality-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0 4px;border-top:1px solid #18253612;margin-top:6px;font-size:12px;color:#5c6874}
+/* Срез */
+.clip-panel{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(150px + env(safe-area-inset-bottom,0px));width:min(460px,calc(100% - 24px));border-radius:8px;padding:10px 14px 12px;z-index:21;display:flex;flex-direction:column;gap:8px}
+.clip-head{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#26313c}
+.clip-head .segmented{flex:1;overflow-x:auto}.clip-head .segmented button{flex:1}
+.clip-head .icon-button{min-width:36px;min-height:36px}
+/* Тест */
+.quiz-panel{position:absolute;right:30px;top:94px;width:360px;border-radius:8px;padding:12px 18px 16px;z-index:22;display:flex;flex-direction:column;gap:10px}
+.quiz-modes{width:100%}.quiz-modes button{flex:1}
+.quiz-q{font-size:14px;color:#26313c;line-height:1.5}.quiz-hint{font-size:12px;color:#a8574a}
+.quiz-options{display:flex;flex-direction:column;gap:6px}
+.quiz-options button{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;font-size:13px;padding:10px 12px;min-height:44px;border-radius:6px;border:1px solid #18253620!important;background:#fff!important;color:#26313c}
+.quiz-options button.right{border-color:#3f8f6a!important;background:#e8f5ee!important}
+.quiz-options button.wrong{border-color:#c0574a!important;background:#fbeceb!important}
+.quiz-result{font-size:13px;line-height:1.5;padding:8px 10px;border-radius:6px}
+.quiz-result.right{background:#e8f5ee;color:#245c43}.quiz-result.wrong{background:#fbeceb;color:#8a3a30}
+.search-missing{font-size:12px;line-height:1.5;color:#8a5a2b;background:#fbf3e6;border-radius:6px;padding:8px 10px;margin-top:10px}
+@media (max-width:767px){.quiz-panel{left:12px;right:12px;top:112px;width:auto;max-height:calc(100dvh - 280px);overflow-y:auto}.clip-panel{bottom:calc(132px + env(safe-area-inset-bottom,0px))}}
+@media (max-width:767px){.quiz-panel{top:auto;bottom:calc(132px + env(safe-area-inset-bottom,0px));max-height:52dvh;gap:8px;padding:10px 14px 12px}.quiz-options{display:grid;grid-template-columns:1fr 1fr}.quiz-options button{font-size:12px;padding:8px 10px}.quiz-q{font-size:13px}}

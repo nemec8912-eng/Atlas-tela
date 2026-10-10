@@ -4,6 +4,7 @@ sys.path.insert(0, '/tmp/claude-0/-home-claude/cbf11d43-6187-53a1-be7c-766797224
 from rename import ru_name
 SRC = '/root/atlas-site-v4-backup/models/'      # текущий опубликованный атлас (имена, системы, понятия, схемы нервов)
 OUT = '/home/claude/atlas-site/models/'
+LEVEL = os.environ.get('LEVEL', 'hi'); PFX = 'geo-lo-' if LEVEL == 'lo' else 'geo-'; CACHE = '/root/dl/cache_lo/' if LEVEL == 'lo' else '/root/dl/cache/'; AJSON = 'atlas-lo.json' if LEVEL == 'lo' else 'atlas.json'
 lib = ctypes.CDLL('/root/dl/libmeshopt.so')
 for f in ['meshopt_encodeVertexBufferBound', 'meshopt_encodeVertexBuffer', 'meshopt_encodeIndexBufferBound', 'meshopt_encodeIndexBuffer', 'meshopt_optimizeVertexFetch']:
     getattr(lib, f).restype = ctypes.c_size_t
@@ -26,7 +27,7 @@ def old_geo(p):
     i = np.frombuffer(b, np.uint32, p['indexCount'], p['indices']).copy()
     return v, i
 def new_geo(key):
-    d = np.load(f'/root/dl/cache/{key}.npz'); return d['v'].astype(np.float32), d['i'].astype(np.uint32)
+    d = np.load(f'{CACHE}{key}.npz'); return d['v'].astype(np.float32), d['i'].astype(np.uint32)
 
 # ---------- какие схемы нервов заменяются настоящими моделями ----------
 SUPERSEDED = {'spinal_cord', 'cauda_equina', 'cervical_plexus', 'brachial_plexus', 'median', 'median_digital', 'ulnar', 'radial',
@@ -182,13 +183,13 @@ def encode(v, i):
     return ev, ei, len(v), len(i), [float(x) for x in lo] + [ext], dq
 
 for f in os.listdir(OUT):
-    if f.endswith('.txt') or f == 'atlas.json': os.remove(OUT + f)
+    if (f.startswith(PFX) and (LEVEL == 'lo' or not f.startswith('geo-lo-'))) or f == AJSON: os.remove(OUT + f)
 chunks = []; buf = bytearray(); out_parts = []; tri = 0; ci = 0
 def flush():
     global buf, ci
     if not buf: return
-    gz = gzip.compress(bytes(buf), 9); name = f'models/geo-{ci}.bin.gz.txt'
-    open(OUT + f'geo-{ci}.bin.gz.txt', 'w').write(base64.b64encode(gz).decode())
+    gz = gzip.compress(bytes(buf), 9); name = f'models/{PFX}{ci}.bin.gz.txt'
+    open(OUT + f'{PFX}{ci}.bin.gz.txt', 'w').write(base64.b64encode(gz).decode())
     chunks.append(dict(url=name, bytes=len(buf), gzip=name, gzipBytes=len(gz))); buf = bytearray(); ci += 1
 order = sorted(range(len(parts)), key=lambda k: (parts[k][0]['system'], parts[k][0]['id']))
 for k in order:
@@ -205,7 +206,7 @@ pos = {r['id']: n for n, r in enumerate(out_parts)}
 atlas = dict(version='BodyParts3D 4.3 (детализация ×2) + русская версия', codec='vq1', sex='male',
              source=A.get('source'), parts=out_parts, chunks=chunks, triangles=tri,
              concepts=[{k: c[k] for k in ('id', 'name', 'en', 'elements', 'desc', 'schematic') if k in c} for c in allc if c['elements']])
-json.dump(atlas, open(OUT + 'atlas.json', 'w'), ensure_ascii=False, separators=(',', ':'))
+json.dump(atlas, open(OUT + AJSON, 'w'), ensure_ascii=False, separators=(',', ':'))
 tot = sum(c['gzipBytes'] for c in chunks)
 print('parts', len(out_parts), 'concepts', len(atlas['concepts']), 'tri', tri, 'chunks', len(chunks), 'gz MB', round(tot / 1e6, 1), 'b64 MB', round(tot * 4 / 3 / 1e6, 1))
 print(collections.Counter(r['system'] for r in out_parts))

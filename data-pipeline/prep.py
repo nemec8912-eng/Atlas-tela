@@ -6,7 +6,7 @@ lib.meshopt_generateVertexRemap.restype = ctypes.c_size_t
 lib.meshopt_simplify.restype = ctypes.c_size_t
 lib.meshopt_optimizeVertexFetch.restype = ctypes.c_size_t
 RATIO = float(os.environ.get('RATIO', '0.5')); ERR = float(os.environ.get('ERR', '0.001')); MINTRI = 240
-OUT = '/root/dl/cache/'
+OUT = os.environ.get('CACHE', '/root/dl/cache/')
 os.makedirs(OUT, exist_ok=True)
 P = lambda a: a.ctypes.data_as(ctypes.c_void_p)
 

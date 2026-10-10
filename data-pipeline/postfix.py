@@ -43,3 +43,19 @@ r=0
 for c in a['concepts']:
     if c.get('en') in REN: c['name'],c['en']=REN[c['en']]; r+=1
 json.dump(a,open(p,'w'),ensure_ascii=False,separators=(',',':')); print('renamed nerve concepts',r)
+a=json.load(open(p))
+pats=[]
+for line in open('/root/dl/desc.tsv',encoding='utf8'):
+    line=line.rstrip('\n')
+    if '\t' in line:
+        k,v=line.split('\t',1); pats.append((re.compile(k),v))
+nz=lambda x:re.sub(r'\s+',' ',re.sub(r'\b(left|right)\b','',(x or '').lower())).strip()
+added=0
+for c in a['concepts']:
+    if c.get('desc'): continue
+    n=nz(c.get('en'))
+    for r,v in pats:
+        if r.fullmatch(n): c['desc']=v; added+=1; break
+C={c['id']:c for c in a['concepts']}
+cov=sum(1 for x in a['parts'] if C[x['conceptId']].get('desc'))
+json.dump(a,open(p,'w'),ensure_ascii=False,separators=(',',':')); print('desc added',added,'parts with own description',cov,'of',len(a['parts']))

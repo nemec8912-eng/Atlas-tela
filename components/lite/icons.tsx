@@ -10,3 +10,7 @@ export const RotateCcw=I('<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74
 export const RotateCw=I('<path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>');
 export const Search=I('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>');
 export const X=I('<path d="M18 6 6 18M6 6l12 12"/>');
+export const Tag=I('<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r="1.2"/>');
+export const Scissors=I('<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>');
+export const GraduationCap=I('<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/>');
+export const Check=I('<path d="M20 6 9 17l-5-5"/>');
