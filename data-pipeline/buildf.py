@@ -96,10 +96,34 @@ for x in parts:
         concepts.append(dict(id=r['conceptId'] + '#' + r['id'], name=r['name'], en=r['en'], elements=[r['id']])); r['conceptId'] = concepts[-1]['id']; cid.add(r['conceptId'])
     elif r['id'] not in next(c for c in concepts if c['id'] == r['conceptId'])['elements']:
         next(c for c in concepts if c['id'] == r['conceptId'])['elements'].append(r['id'])
+# дополнения: скелет и мышцы, подогнанные из BodyParts3D; беременность внутри тела
+import pickle
+X=pickle.load(open('/root/rg/femextra.pkl','rb'))
+sys.path.insert(0,'/root/rg');import os;_cwd=os.getcwd();os.chdir('/root/rg');from preg2 import deform,place;os.chdir(_cwd)
+byid={x['rec']['id']:x for x in parts}
+for pid,r in X['renames'].items():
+    rec=byid[pid]['rec'];old=rec['conceptId']
+    for c in concepts:
+        if c['id']==old and pid in c['elements']:c['elements'].remove(pid)
+    rec.update(r)
+concepts=[c for c in concepts if c['elements']]
+for pid in X['normal_only']:byid[pid]['rec']['when']='normal'
+for pid in X['preg']:byid[pid]['v']=place(byid[pid]['v'].astype(np.float64)).astype(np.float32)
+for e in X['extra']:parts.append(dict(rec=dict(e['rec']),v=np.ascontiguousarray(e['v'],np.float32),i=np.ascontiguousarray(e['i'],np.uint32)));byid[e['rec']['id']]=parts[-1]
+cmap={c['id']:c for c in concepts}
+for c in X['concepts']:
+    if c['id'] in cmap:cmap[c['id']]['elements']+= [e for e in c['elements'] if e not in cmap[c['id']]['elements']]
+    else:concepts.append(dict(c));cmap[c['id']]=concepts[-1]
+for pid,v in X['variant'].items():
+    base=byid[pid]
+    if v is None:v=deform(base['v'].astype(np.float64))[0].astype(np.float32)
+    base['rec']['when']='normal';r=dict(base['rec']);r['id']=pid+'~p';r['when']='pregnant'
+    parts.append(dict(rec=r,v=np.ascontiguousarray(v,np.float32),i=base['i']));cmap[r['conceptId']]['elements'].append(r['id'])
 # описания
 pats = [(re.compile(l.split('\t', 1)[0]), l.rstrip('\n').split('\t', 1)[1]) for l in open('/root/dl/desc.tsv', encoding='utf8') if '\t' in l]
 nz = lambda x: norm((x or '').lower()).replace(' ()', '').strip()
 for c in concepts:
+    if c.get('desc'):continue
     n = nz(c['en'])
     for r, d in pats:
         if r.fullmatch(n): c['desc'] = d; break

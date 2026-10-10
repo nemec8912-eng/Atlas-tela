@@ -151,3 +151,16 @@ h1 .edition{font-family:inherit;font-weight:500;font-size:10px;letter-spacing:.0
 .identity .sex-switch{pointer-events:auto;position:relative;z-index:6}
 .identity-meta{display:flex;align-items:center;gap:0;flex-wrap:wrap}
 .identity .sex-switch{margin:0;padding:1px;border-radius:6px}.identity .sex-switch button{min-height:24px;padding:2px 9px;font-size:11px}
+/* Изоляция области и демонстрация движения */
+.focus-panel{position:absolute;left:50%;transform:translateX(-50%);top:94px;width:min(400px,calc(100% - 24px));border-radius:8px;padding:12px 16px 14px;z-index:21;display:flex;flex-direction:column;gap:12px;max-height:calc(100dvh - 300px);overflow-y:auto;overscroll-behavior:contain}
+.focus-block{display:flex;flex-direction:column;gap:8px}.focus-block+.focus-block{border-top:1px solid #18253612;padding-top:12px}
+.focus-block .explode-label{margin:2px 0 0}.focus-block [data-slot=slider]{padding:6px 0}.focus-block .slider-endpoints{margin-top:0}
+.focus-name{text-transform:none;font-weight:600}.focus-title{margin:0;font-size:13px;color:#26313c}.focus-title span{color:#7c8793}
+.focus-note{margin:0;font-size:12px;line-height:1.55;color:#66727f}.focus-hint{margin:0;font-size:11px;line-height:1.5;color:#87929d}
+.focus-actions{display:flex;flex-wrap:wrap;gap:4px}.focus-actions button{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#3c4956;padding:8px 10px;min-height:40px;border:1px solid #18253618;border-radius:7px}.focus-actions button[aria-pressed=true]{background:#263b4812}
+.focus-panel .primary-action{background:#263b48;color:#fff!important;border-radius:9px;font-size:12px;min-height:42px;margin-top:2px}
+.detail-actions .region-action{display:flex;align-items:center;gap:8px;justify-content:flex-start;color:#3c4956}
+@media (max-width:767px){.focus-panel{top:auto;bottom:calc(132px + env(safe-area-inset-bottom,0px));padding:10px 12px 12px;gap:10px;max-height:min(46dvh,calc(100dvh - 330px))}.focus-actions button{flex:1;justify-content:center;padding:8px 6px;font-size:11px}}
+
+@media (min-width:768px){.focus-panel{left:auto;right:95px;transform:none;top:105px;width:330px;max-height:calc(100dvh - 290px)}body:has(.detail-sheet) .focus-panel{right:auto;left:max(300px,calc(100% - 840px))}}
+@media (max-width:767px){.clip-panel~.focus-panel{bottom:calc(250px + env(safe-area-inset-bottom,0px))}}

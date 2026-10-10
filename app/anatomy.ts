@@ -25,11 +25,17 @@ export const GROUPS:{id:GroupId;name:string;color:string;systems:SystemId[];desc
  {id:'circulatory',name:'Кровеносная система',color:'#c9473b',systems:['cardiac','arterial','venous'],description:'Сердце, артерии и вены — больше тысячи сосудов от аорты до ветвей пальцев. Сердце перекачивает около 5 литров крови в минуту по двум кругам кровообращения.'},
  {id:'nervous',name:'Нервная система',color:'#e2bd55',systems:['nervous','sensory'],description:'Головной и спинной мозг, спинномозговые нервы со сплетениями, нервы рук и ног, черепные нервы и симпатический ствол.'},
 ];
-export interface Part {lo?:number[];id:string;name:string;en?:string;schematic?:boolean;mirrored?:boolean;ev?:number;evb?:number;ei?:number;eib?:number;q?:[number,number,number,number];conceptId:string;system:SystemId;chunk:number;positions:number;normals:number;indices:number;vertexCount:number;indexCount:number;bounds:[number[],number[]]}
-export interface Concept {id:string;name:string;en?:string;elements:string[];desc?:string;schematic?:boolean;mirrored?:boolean}
+export interface Part {when?:'pregnant'|'normal';adapted?:boolean;lo?:number[];id:string;name:string;en?:string;schematic?:boolean;mirrored?:boolean;ev?:number;evb?:number;ei?:number;eib?:number;q?:[number,number,number,number];conceptId:string;system:SystemId;chunk:number;positions:number;normals:number;indices:number;vertexCount:number;indexCount:number;bounds:[number[],number[]]}
+export interface Concept {id:string;name:string;en?:string;elements:string[];desc?:string;schematic?:boolean;mirrored?:boolean;adapted?:boolean}
+/** Варианты деталей для беременности: «normal» видна без слоя «Беременность», «pregnant» — только с ним. */
+export const variantShown=(p:Part,pregnant:boolean)=>!p.when||(p.when==='pregnant')===pregnant;
 export interface Atlas {codec?:string;lowChunks?:{url:string;bytes:number;gzip?:string;gzipBytes?:number}[];lowTriangles?:number;version:string;sex?:'male';source?:string;scope?:string;parts:Part[];concepts:Concept[];chunks:{url:string;bytes:number;gzip?:string;gzipBytes?:number}[];triangles:number}
 export type View = 'three-quarter'|'front'|'back'|'side';
-export interface SceneState {labels?:boolean;clip?:{on:boolean;axis:'x'|'y'|'z';pos:number};inspectorOpen?:boolean;explode:number;visible:SystemId[];selected:string[];isolate:boolean;view:View;rotate:boolean;reset:number}
+/** Изолированная область тела: детали области, обрезаемые по её границе детали и локальная разборка 0…1. */
+export interface RegionView {id:import('./regions').RegionId;members:string[];clipped:string[];spread:number}
+/** Демонстрация движения мышцы: progress 0 — исходное положение, 1 — полное сокращение. */
+export interface MotionView {key:string;joint:import('./motion').JointId;side:'left'|'right';from:number;to:number;muscle:string[];progress:number}
+export interface SceneState {region?:RegionView|null;motion?:MotionView|null;labels?:boolean;clip?:{on:boolean;axis:'x'|'y'|'z';pos:number};inspectorOpen?:boolean;explode:number;visible:SystemId[];selected:string[];isolate:boolean;view:View;rotate:boolean;reset:number}
 export const DEFAULT_VISIBLE:SystemId[] = ['cardiac','sensory','skeletal','muscular','arterial','venous','nervous','respiratory','digestive','urinary','lymphatic','endocrine','reproductive','connective'];
 /** Пояснения по английскому названию структуры (ключ — англ. название в нижнем регистре, без left/right). */
 export const EXPLANATIONS:Record<string,string> = {
