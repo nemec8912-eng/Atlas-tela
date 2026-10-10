@@ -1,7 +1,7 @@
 import json,re,sys
 S='/tmp/claude-0/-home-claude/cbf11d43-6187-53a1-be7c-766797224c02/scratchpad/'
 tr={}
-for i in range(1,8):
+for i in range(1,9):
     for l in open(f'{S}ru{i}.tsv',encoding='utf8'):
         l=l.rstrip('\n')
         if l: en,ru=l.split('\t'); tr[en]=ru

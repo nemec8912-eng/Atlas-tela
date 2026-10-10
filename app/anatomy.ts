@@ -1,4 +1,4 @@
-export type SystemId = 'skeletal'|'muscular'|'arterial'|'venous'|'nervous'|'digestive'|'respiratory'|'urinary'|'reproductive'|'lymphatic'|'endocrine'|'integumentary'|'connective'|'sensory'|'cardiac'|'skin'|'hair';
+export type SystemId = 'skeletal'|'muscular'|'arterial'|'venous'|'nervous'|'digestive'|'respiratory'|'urinary'|'reproductive'|'lymphatic'|'endocrine'|'integumentary'|'connective'|'sensory'|'cardiac'|'skin'|'hair'|'mammary'|'pregnancy';
 export const SYSTEMS: {id:SystemId;name:string;color:string;description:string}[] = [
  {id:'skin',name:'Кожа',color:'#d9a68a',description:'Кожа — самый большой орган тела: у взрослого её площадь около 1,7 м², а масса — до 4 кг вместе с подкожной клетчаткой. Она защищает от микробов и потери воды, участвует в терморегуляции, осязании и выработке витамина D.'},
  {id:'hair',name:'Волосяной покров',color:'#4a3426',description:'Волосы растут из волосяных фолликулов в коже и состоят из кератина. На голове их около 100 000; волосы защищают от солнца и холода, брови отводят пот от глаз, а волосы тела участвуют в осязании.'},
@@ -15,6 +15,8 @@ export const SYSTEMS: {id:SystemId;name:string;color:string;description:string}[
  {id:'lymphatic',name:'Лимфатическая',color:'#879f7c',description:'Лимфатические сосуды возвращают избыток тканевой жидкости в кровоток. Лимфоидные органы участвуют в иммунной защите.'},
  {id:'endocrine',name:'Эндокринная',color:'#c5a09a',description:'Железы внутренней секреции выделяют гормоны в кровь и регулируют обмен веществ, рост, реакцию на стресс и размножение.'},
  {id:'reproductive',name:'Половая',color:'#bda098',description:'Мужские половые органы обеспечивают образование, созревание и транспорт сперматозоидов, а также выработку половых гормонов.'},
+ {id:'mammary',name:'Молочные железы',color:'#d9a090',description:'Молочные железы состоят из долей с млечными протоками, окружённых жировой тканью и поддерживающими связками. После родов под действием пролактина вырабатывают молоко.'},
+ {id:'pregnancy',name:'Беременность',color:'#c98f8f',description:'Плацента, пуповина и плодные оболочки — временные органы беременности. В эталонной модели они показаны отдельно, без плода.'},
  {id:'connective',name:'Соединительная ткань',color:'#aec3bb',description:'Хрящи, связки и другие соединительные ткани поддерживают, соединяют и разделяют структуры, стабилизируют суставы и распределяют нагрузку.'},
 ];
 export type GroupId='circulatory'|'nervous';
@@ -74,7 +76,7 @@ const key=(n:string)=>n.toLowerCase().replace(/\b(left|right)\b/g,'').replace(/\
 export function hasExplanation(en?:string){return !!en&&!!EXPLANATIONS[key(en)];}
 export function explanation(en:string|undefined,system:SystemId){return (en&&EXPLANATIONS[key(en)]) || SYSTEMS.find(s=>s.id===system)?.description || '';}
 /** Подсказки для пустого поиска (англ. ключи). */
-export const SUGGESTED=['heart','aorta','brain','spinal cord','sciatic nerve','vagus nerve','cerebral arterial circle','median nerve','superior vena cava','liver'];
+export const SUGGESTED=['heart','aorta','brain','spinal cord','sciatic nerve','vagus nerve','cerebral arterial circle','median nerve','superior vena cava','liver','uterus','ovary','mammary gland','placenta','kidney','lungs'];
 /** Бытовые названия → что искать в атласе. */
 export const SYNONYMS:Record<string,string[]>={
  'бицепс':['двуглавой мышцы плеча','двуглавая мышца плеча'],'трицепс':['трёхглавой мышцы плеча','трёхглавая мышца плеча'],'дельта':['дельтовидная'],'грудные мышцы':['большая грудная'],'грудь':['большая грудная','грудина'],
