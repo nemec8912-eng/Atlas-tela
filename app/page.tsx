@@ -17,7 +17,7 @@ type Quiz={mode:'name'|'find';item:QuizItem;options:string[];answer:string|null;
 const defVis=(x:'male'|'female'):SystemId[]=>x==='female'?[...DEFAULT_VISIBLE,'mammary']:DEFAULT_VISIBLE;
 const dedupe=(list:Concept[])=>{const seen=new Map<string,Concept>();for(const c of list){const k=c.name;const prev=seen.get(k);if(!prev||c.elements.length>prev.elements.length)seen.set(k,c);}return list.filter(c=>seen.get(c.name)===c);};
 const savedSex=():'male'|'female'=>{try{return localStorage.getItem('atlas-sex')==='female'?'female':'male';}catch{return 'male';}};
-const autoQuality=():'hi'|'lo'=>{try{const v=localStorage.getItem('atlas-quality');if(v==='hi'||v==='lo')return v;}catch{}const n=navigator as Navigator&{deviceMemory?:number};return (n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)?'lo':'hi';};
+const autoQuality=():'hi'|'lo'=>{try{const v=localStorage.getItem('atlas-quality');if(v==='hi'||v==='lo')return v;}catch{}try{if(matchMedia('(pointer:coarse)').matches||Math.min(screen.width,screen.height)<768)return 'lo';}catch{}const n=navigator as Navigator&{deviceMemory?:number};return (n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)?'lo':'hi';};
 export default function Home(){
  const detailTitle=useRef<HTMLHeadingElement>(null);
  const [sex,setSex]=useState<'male'|'female'>(savedSex);
